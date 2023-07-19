@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Metamask Connection</title>
+</head>
+
+<body>
+
+  <center>
+    <h1>Metamask Connection</h1>
+    <h3>Verify your wallet address</h3>
+    <button id="connectWallet">Connect Wallet</button>
+    <button id="sign" style="display: none;">Sign</button>
+
+    <p id="status"></p>
+    <p id="walletAddress"></p>
+
+    <script type="text/javascript">
+      window.walletAddress = null;
+      const connectWallet = document.getElementById("connectWallet");
+      const status = document.getElementById("status");
+      const walletAddress = document.getElementById("walletAddress");
+
+      async function checkInstalled() {
+        if (typeof window.ethereum === "undefined") {
+          status.innerHTML = "Metamask not installed. Please install it and try again.";
+          return false;
+        }
+
+        const accounts = await window.ethereum.request({ method: "eth_accounts" });
+
+        if (accounts.length > 0) {
+          window.walletAddress = accounts[0];
+          walletAddress.innerHTML = "Wallet Address: " + window.walletAddress;
+          status.innerHTML = "Connected to Metamask.";
+          connectWallet.innerText = "Sign Out";
+          // make sign button visible
+          document.getElementById("sign").style.display = "block";
+          document.getElementById("sign").addEventListener("click", signMessage);
+          connectWallet.addEventListener("click", signOut);
+        } else {
+          connectWallet.addEventListener("click", connectWalletwithMetamask);
+        }
+
+        return true;
+      }
+
+      async function connectWalletwithMetamask() {
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" }).catch((err) => {
+          status.innerHTML = "Please connect to Metamask.";
+          console.error(err);
+          return false;
+        });
+
+        if (!accounts) {
+          return false;
+        }
+
+        window.walletAddress = accounts[0];
+        localStorage.setItem("walletAddress", window.walletAddress); // Store wallet address in local storage
+        walletAddress.innerHTML = "Wallet Address: " + window.walletAddress;
+        status.innerHTML = "Connected to Metamask.";
+        connectWallet.innerText = "Sign Out";
+        // make sign button visible
+        document.getElementById("sign").style.display = "block";
+        document.getElementById("sign").addEventListener("click", signMessage);
+
+        connectWallet.removeEventListener("click", connectWalletwithMetamask);
+        connectWallet.addEventListener("click", signOut);
+
+        return true;
+      }
+
+      function signOut() {
+        window.walletAddress = null;
+        localStorage.removeItem("walletAddress"); // Remove wallet address from local storage
+        walletAddress.innerHTML = "";
+        status.innerHTML = "";
+        connectWallet.innerText = "Connect Wallet";
+        connectWallet.removeEventListener("click", signOut);
+        connectWallet.addEventListener("click", connectWalletwithMetamask);
+      }
+
+      async function signMessage() {
+        const message = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        const signature = await window.ethereum.request({ method: "personal_sign", params: [message, window.walletAddress] });
+        console.log(signature);
+
+        // Send signature to backend
+        const response = await fetch("/verify", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            account: window.walletAddress,
+            signature: signature,
+            message: message,
+          }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          window.location.href = "/result?result_message=" + encodeURIComponent(result.result_message) + "&owner_wallet_address=" + encodeURIComponent(result.owner_wallet_address) + "&owner_nft_ids=" + encodeURIComponent(result.owner_nft_ids) + "&user_wallet_address=" + encodeURIComponent(result.user_wallet_address) + "&user_nft_ids=" + encodeURIComponent(result.user_nft_ids) + "&same_nfts=" + encodeURIComponent(result.same_nfts);
+
+        } else {
+          console.error("Verification failed.");
+        }
+      }
+
+      window.addEventListener("DOMContentLoaded", async () => {
+        const storedWalletAddress = localStorage.getItem("walletAddress"); // Check if wallet address is stored in local storage
+        if (storedWalletAddress) {
+          window.walletAddress = storedWalletAddress;
+          walletAddress.innerHTML = "Wallet Address: " + window.walletAddress;
+          status.innerHTML = "Connected to Metamask.";
+          connectWallet.innerText = "Sign Out";
+          // make sign button visible
+          document.getElementById("sign").style.display = "block";
+          document.getElementById("sign").addEventListener("click", signMessage);
+          connectWallet.addEventListener("click", signOut);
+        } else {
+          await checkInstalled();
+        }
+      });
+    </script>
+  </center>
+</body>
+
+</html>

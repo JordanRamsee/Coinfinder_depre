@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Verification Result</title>
+</head>
+
+<body>
+  <center>
+    <h1>Verification Result</h1>
+
+    {% if result_message %}
+    <p>{{ result_message }}</p>
+    {% endif %}
+
+    {% if owner_wallet_address %}
+    <p>Owner Wallet address : {{ owner_wallet_address }}</p>
+    {% endif %}
+
+    {% if owner_nft_ids %}
+    <p>Owner nft ids: {{ owner_nft_ids }}</p>
+    {% else %}
+    <p>Owner nft ids: No nfts found</p>
+    {% endif %}
+
+    {% if user_wallet_address %}
+    <p>User wallet address : {{ user_wallet_address }}</p>
+    {% endif %}
+
+    {% if user_nft_ids %}
+    <p>User nft ids: {{ user_nft_ids }}</p>
+    {% else %}
+    <p>User nft ids: No nfts found</p>
+    {% endif %}
+
+    {% if same_nfts %}
+    <p>Intersection between the two nft ids: {{ same_nfts }}</p>
+    {% else %}
+    <p>Intersection between the two nft ids: No common nfts found!</p>
+    {% endif %}
+
+  </center>
+</body>
+
+</html>
