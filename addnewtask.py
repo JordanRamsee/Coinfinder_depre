@@ -1,4 +1,13 @@
 """
+╔══════════════════════════════════════════════════════════╗
+║                      addnewtask.py                       ║
+╚══════════════════════════════════════════════════════════╝
+┌──────────────────────────────────────────────────────────┐
+│                        Author                            │
+├──────┬────────────────────┬───────┬──────────────────────┤
+│ Name │ A S M Saad         │ Email │ asmsaad3@gmail.com   │
+├──────┼────────────────────┼───────┼──────────────────────┤
+│ Date │ June 6, 2023       │ Github│ asmsaad/mintrower    │
 ├──────┴────────────────────┴───────┴──────────────────────┤
 │                       Description                        │
 ├──────────────────────────────────────────────────────────┤
@@ -6,6 +15,7 @@
 │                                                          │
 └──────────────────────────────────────────────────────────┘
 """
+
 
 from tkinter import *
 from tkinter import ttk
@@ -21,11 +31,12 @@ class AddNewTask:
         self.tab_property = tab_property
 
         # Create a window
-        self.toplevel_window_obj = TkTopLevel(root_window.winfo_toplevel(),(350, 550))
+        self.toplevel_window_obj = TkTopLevel(root_window.winfo_toplevel(),(350, 650))
         self.window = self.toplevel_window_obj.create()
 
         self.window_configuration = WindowConfiguration(self.window)
-        self.window_configuration.geometry(350, 550)
+        # self.window_configuration.geometry(350, 550)
+        self.window_configuration.geometry(350, 650)
         self.window_configuration.resizable(width=False, height=False)
         self.navigation_bar_canvas, self.working_area_canvas = self.window_configuration.custom_navigation_bar()
         # Navigation bar design
@@ -41,8 +52,9 @@ class AddNewTask:
 
     def property(self):
 
+        test = ["testing", "mesting", "besting", "resting"]
         self.entry_widget_info = {
-            "Website": {"type": "ComboBox", "values": []},
+            "Website": {"type": "ComboBox", "values": ["FinishLine/JD Sports US", "Footsites (US)", "Footsites (EU)", "Supreme (US)", "Supreme (EU)", "Demandware", "Yeezy Supply", "Kith EU", "Kith US"]},
             "Billing Profile": {"type": "ComboBox", "values": []},
             "Proxy": {"type": "ComboBox", "values": []},
             "Category": {"type": "ComboBox", "values": ["Started", "Created Browser", "At Homepage", "At View All", "At Category Page", "At Product Page", "Selected Size", "Added to Cart", "Checked Out"]},
@@ -59,7 +71,7 @@ class AddNewTask:
         self.data_entry_root_Frame.pack()
         self.data_entry_root_Frame.pack_propagate(False)
 
-        data_entry_Frame = Frame(self.data_entry_root_Frame,bg=Colors__.color()["navigation bar"]["selected tab"],height=470,width=350-15,pady=5,border=0,borderwidth=0,highlightthickness=0)
+        data_entry_Frame = Frame(self.data_entry_root_Frame,bg=Colors__.color()["navigation bar"]["selected tab"],height=580,width=350-15,pady=5,border=0,borderwidth=0,highlightthickness=0)
         data_entry_Frame.pack()
         # Set the initial theme
         # self.data_entry_Frame.tk.call("source", "res/Theme/azure.tcl")
@@ -80,7 +92,7 @@ class AddNewTask:
         self.add_new_data_widget = {}
         for index, each_info in enumerate(list(self.entry_widget_info.keys())):
             self.add_new_data_widget[each_info] = {}
-            self.add_new_data_widget[each_info]["frame"]= Frame(data_entry_Frame,bg=Colors__.color()["navigation bar"]["selected tab"],height=42,width=350-15,border=0,borderwidth=0,highlightthickness=0)
+            self.add_new_data_widget[each_info]["frame"]= Frame(data_entry_Frame,bg=Colors__.color()["navigation bar"]["selected tab"],height=33,width=350-15,border=0,borderwidth=0,highlightthickness=0)
             self.add_new_data_widget[each_info]["frame"].pack(anchor=W)
             self.add_new_data_widget[each_info]["frame"].pack_propagate(False)
 
@@ -89,7 +101,7 @@ class AddNewTask:
 
             if self.entry_widget_info[each_info]["type"] == "ComboBox":
 
-                self.add_new_data_widget[each_info]["insert_data"] = ttk.Combobox(self.add_new_data_widget[each_info]["frame"],state="normal", width=17,font=("Arial", "12", "normal"),style="TCombobox")
+                self.add_new_data_widget[each_info]["insert_data"] = ttk.Combobox(self.add_new_data_widget[each_info]["frame"],state="readonly", width=17,font=("Arial", "12", "normal"),style="TCombobox")
                 self.add_new_data_widget[each_info]["insert_data"].pack(side=RIGHT,anchor=E,ipady=4)
                 self.add_new_data_widget[each_info]["insert_data"]["value"] = self.entry_widget_info[each_info]["values"]
 
@@ -115,7 +127,7 @@ class AddNewTask:
         be displayed in the task table, and  it  must align with the
         keys present in self.entry_widget_info.
         '''
-
+        
         display_data = {
             "ID": self.new_task_id,
             "Website": "",
