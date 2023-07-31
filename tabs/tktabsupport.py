@@ -140,7 +140,15 @@ class TabProperty:
             "billing": {
                 "left": {"width": 32 + 16, "type": "single", "canvas_width":32*2, "bg":"red"},
                 "right": {"width": 32 + 16, "type": "single", "canvas_width":32*2, "bg":"green"},
-            }
+            },
+            "proxy": {
+                "left": {"width": 32 + 16, "type": "single", "canvas_width":32*2, "bg":"red"},
+                "right": {"width": 32 + 16, "type": "single", "canvas_width":32*2, "bg":"green"},
+            },
+            "capture": {
+                "left": {"width": 32 + 16, "type": "single", "canvas_width":32*2, "bg":"red"},
+                "right": {"width": 32 + 16, "type": "single", "canvas_width":32*2, "bg":"green"},
+            },
         }
 
         self.action_btn_bg = {}
@@ -172,11 +180,54 @@ class TabProperty:
                 individual_control_btn[each_control_btn]["btn"].place(x=control_btn_details[each_control_btn]["place"]["x"],y=control_btn_details[each_control_btn]["place"]["y"])
             # Button Press Action
             individual_control_btn["run"]["btn"]["command"] = lambda Tk_btn_=individual_control_btn["run"],stage = "run", display_data= display_data : self.run_stop_each_individual(Tk_btn_,stage, display_data)
+        
         elif self.current_tab_name == "billing":
-            individual_control_btn["edit"] = {}
-            individual_control_btn["edit"]["btn_obj"] = TkWidget()
-            individual_control_btn["edit"]["btn"] = individual_control_btn["edit"]["btn_obj"].image_btn(self.action_btn_bg["left"] , imgTk=image__.icons("edit".lower(),dimension=(12,12)), imgTk_hover=image__.icons("edit".lower()+"_hover",dimension=(12,12)), dimension= (16,16), bg = Colors__.color()["task"]["action bg"], activebackground = Colors__.color()["task"]["action bg"])
-            individual_control_btn["edit"]["btn"].place(x=15,y=8)
+            control_btn_details = {
+                "edit":  {"place": {"x": 20, "y": 8}},
+                "delete": {"place": {"x": 60, "y": 8}},
+            }
+            for each_control_btn in control_btn_details:
+                individual_control_btn[each_control_btn] = {}
+                individual_control_btn[each_control_btn]["btn_obj"] = TkWidget()
+                individual_control_btn[each_control_btn]["btn"] = individual_control_btn[each_control_btn]["btn_obj"].image_btn(self.action_btn_bg["left"] , imgTk=image__.icons(each_control_btn.lower(),dimension=(12,12)), imgTk_hover=image__.icons(each_control_btn.lower()+"_hover",dimension=(12,12)), dimension= (16,16), bg = Colors__.color()["task"]["action bg"], activebackground = Colors__.color()["task"]["action bg"])
+                individual_control_btn[each_control_btn]["btn"].place(x=control_btn_details[each_control_btn]["place"]["x"],y=control_btn_details[each_control_btn]["place"]["y"])
+            # Button Press Action
+            individual_control_btn["delete"]["btn"]["command"] = lambda Tk_btn_=individual_control_btn["delete"],stage = "delete", display_data= display_data : self.run_stop_each_individual(Tk_btn_,stage, display_data)
+        
+        elif self.current_tab_name == "proxy":
+            control_btn_details = {
+                "edit":  {"place": {"x": 20, "y": 8}},
+                "delete": {"place": {"x": 60, "y": 8}},
+            }
+
+            for each_control_btn in control_btn_details:
+
+                individual_control_btn[each_control_btn] = {}
+                individual_control_btn[each_control_btn]["btn_obj"] = TkWidget()
+                individual_control_btn[each_control_btn]["btn"] = individual_control_btn[each_control_btn]["btn_obj"].image_btn(self.action_btn_bg["left"] , imgTk=image__.icons(each_control_btn.lower(),dimension=(12,12)), imgTk_hover=image__.icons(each_control_btn.lower()+"_hover",dimension=(12,12)), dimension= (16,16), bg = Colors__.color()["task"]["action bg"], activebackground = Colors__.color()["task"]["action bg"])
+                individual_control_btn[each_control_btn]["btn"].place(x=control_btn_details[each_control_btn]["place"]["x"],y=control_btn_details[each_control_btn]["place"]["y"])
+            
+            # Button Press Action
+            individual_control_btn["delete"]["btn"]["command"] = lambda Tk_btn_=individual_control_btn["delete"],stage = "delete", display_data= display_data : self.run_stop_each_individual(Tk_btn_,stage, display_data)
+        
+        elif self.current_tab_name == "capture":
+            control_btn_details = {
+                "edit":  {"place": {"x": 20, "y": 8}},
+                "delete": {"place": {"x": 60, "y": 8}},
+            }
+
+            for each_control_btn in control_btn_details:
+
+                individual_control_btn[each_control_btn] = {}
+                individual_control_btn[each_control_btn]["btn_obj"] = TkWidget()
+                individual_control_btn[each_control_btn]["btn"] = individual_control_btn[each_control_btn]["btn_obj"].image_btn(self.action_btn_bg["left"] , imgTk=image__.icons(each_control_btn.lower(),dimension=(12,12)), imgTk_hover=image__.icons(each_control_btn.lower()+"_hover",dimension=(12,12)), dimension= (16,16), bg = Colors__.color()["task"]["action bg"], activebackground = Colors__.color()["task"]["action bg"])
+                individual_control_btn[each_control_btn]["btn"].place(x=control_btn_details[each_control_btn]["place"]["x"],y=control_btn_details[each_control_btn]["place"]["y"])
+            
+            # Button Press Action
+            individual_control_btn["delete"]["btn"]["command"] = lambda Tk_btn_=individual_control_btn["delete"],stage = "delete", display_data= display_data : self.run_stop_each_individual(Tk_btn_,stage, display_data)
+
+        
+
         # Edit Button Press Action
         individual_control_btn["edit"]["btn"]["command"] = lambda display_data = display_data, column_data=column_data : self.edit_data(display_data,column_data)
 
@@ -212,7 +263,10 @@ class TabProperty:
             task_tab_action_delete(display_data)
         elif self.current_tab_name == "billing":
             billing_tab_action_delete(display_data)
-
+        elif self.current_tab_name == "proxy":
+            proxies_tab_action_delete(display_data)
+        elif self.current_tab_name == "capture":
+            captures_tab_action_delete(display_data)
         root_frame.destroy()
 
 
@@ -241,4 +295,8 @@ class TabProperty:
             task_tab_action_edit(display_data,column_data)
         elif self.current_tab_name == "billing":
             billing_tab_action_edit(display_data,column_data)
+        elif self.current_tab_name == "proxy":
+            proxies_tab_action_edit(display_data,column_data)
+        elif self.current_tab_name == "capture":
+            captures_tab_action_edit(display_data,column_data)
 

@@ -11,6 +11,8 @@ from icons import *
 from tksupport import *
 from tabs.tasks import *
 from tabs.billing import *
+from tabs.capture import *
+from tabs.proxy import *
 
 class Tab:
     def __init__(self, tab_frame,working_canvas):
@@ -75,14 +77,14 @@ class Tab:
             self.tab_btns[individual_tab_name]["btn"].pack(anchor=W,side=LEFT)
             self.tab_btns[individual_tab_name]["btn"].bind("<Button-1>",lambda e, tab_name = individual_tab_name : self.change_tab_action(e,tab_name))
             # Define Each Tab Frame
-            self.tab_btns[individual_tab_name]["working_canvas"] = Canvas(self.working_canvas,bg=self.tab_details[individual_tab_name]["bg"],height=750-30,width=1300,border=0,borderwidth=0,highlightthickness=0)
+            self.tab_btns[individual_tab_name]["working_canvas"] = TKScrollCanvas(self.working_canvas,bg=self.tab_details[individual_tab_name]["bg"],height=750-30,width=1300,border=0,borderwidth=0,highlightthickness=0)
             self.tab_btns[individual_tab_name]["working_canvas"].pack_propagate(False)
             # print(individual_tab_name)
 
             if individual_tab_name == "Task" : TaskTab(self.tab_btns[individual_tab_name]["working_canvas"])
             elif individual_tab_name == "Billing": BillingTab(self.tab_btns[individual_tab_name]["working_canvas"])
-            elif individual_tab_name == "Proxies": pass
-            elif individual_tab_name == "Capture": pass
+            elif individual_tab_name == "Proxies": ProxyTab(self.tab_btns[individual_tab_name]["working_canvas"])
+            elif individual_tab_name == "Capture": CaptureTab(self.tab_btns[individual_tab_name]["working_canvas"])
             elif individual_tab_name == "Settings": pass
 
 
