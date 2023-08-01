@@ -17,7 +17,9 @@ class CheckListComboBox(tk.Menubutton):
         super().__init__(master, text=text, relief=tk.RAISED, **kwargs)
 
         # create a Menu widget and set it as the menu option
-        self.menu = tk.Menu(self, tearoff=0)
+        self.menu = tk.Menu(self, tearoff=0 )
+        
+        
         self["menu"] = self.menu
 
         self.values = values
@@ -25,20 +27,25 @@ class CheckListComboBox(tk.Menubutton):
         # create the checkboxes and store them in a list
         self.checkboxes = []
         for label, variable in values:
-            checkbox = self.menu.add_checkbutton(label=label, variable=variable)
+            checkbox = self.menu.add_checkbutton(label=label, variable=variable , command=lambda:self.rerender())
             self.checkboxes.append(checkbox)
 
     def get_values(self):
         """Return a list of values of the checkboxes"""
         return [var.get() for _, var in self.values]
     
+    def rerender(self):
+        self.menu.post(self.winfo_rootx(), self.winfo_rooty() + self.winfo_height())
+
     def get(self):
         result = ""
         for value in self.values:
             if value[1].get() > 0:
                 result += value[0] + ", "
-            
-        result.removesuffix(", ")
+        try:
+            result.removesuffix(", ")
+        except :
+            pass
 
         return result
 
@@ -56,6 +63,8 @@ class CheckListComboBox(tk.Menubutton):
         self.menu.entryconfig(index, command=command)
 
     def update_text(self):
+        self.menu.post(self.winfo_rootx(), self.winfo_rooty() + self.winfo_height())
+
         self["text"] = self.get()    
 
     def post_menu(self):
@@ -67,3 +76,4 @@ class CheckListComboBox(tk.Menubutton):
         curr_values = self.get_values()
         if curr_values != self.prev_values:
             self.update_text()
+        
