@@ -1,32 +1,15 @@
-"""
-╔══════════════════════════════════════════════════════════╗
-║                      addnewtask.py                       ║
-╚══════════════════════════════════════════════════════════╝
-┌──────────────────────────────────────────────────────────┐
-│                        Author                            │
-├──────┬────────────────────┬───────┬──────────────────────┤
-│ Name │ A S M Saad         │ Email │ asmsaad3@gmail.com   │
-├──────┼────────────────────┼───────┼──────────────────────┤
-│ Date │ June 6, 2023       │ Github│ asmsaad/mintrower    │
-├──────┴────────────────────┴───────┴──────────────────────┤
-│                       Description                        │
-├──────────────────────────────────────────────────────────┤
-│                                                          │
-│                                                          │
-└──────────────────────────────────────────────────────────┘
-"""
-
 from tkinter import *
 from tkinter import ttk
 from window import *
 from navigationbar import  *
 from tksupport import *
 from checklistcombobox import *
-# from tabs.actions import task_tab_action_add_new_data_to_DB
+
+# from tabs.actions import proxy_tab_action_add_new_data_to_DB
 #
-class AddNewTask:
-    def __init__(self,root_window,data_show_frame,tab_property,new_task_id:str=''):
-        self.new_task_id = new_task_id
+class AddNewCapture:
+    def __init__(self,root_window,data_show_frame,tab_property,new_capture_id:str=''):
+        self.new_capture_id = new_capture_id
         self.data_show_frame = data_show_frame
         self.tab_property = tab_property
 
@@ -53,11 +36,11 @@ class AddNewTask:
 
         test = ["testing", "mesting", "besting", "resting"]
         self.entry_widget_info = {
-            "Website": {"type": "CheckListComoboBox", "values": ["FinishLine/JD Sports US", "Footsites (US)", "Footsites (EU)", "Supreme (US)", "Supreme (EU)", "Demandware", "Yeezy Supply", "Kith EU", "Kith US"]},
-            "Billing Profile": {"type": "CheckListComoboBox", "values": ["Profile 1", "Profile 2", "Profile 3", "Profile 4"]},
-            "Proxy": {"type": "Entry", "values": []},
-            "Size": {"type": "Entry", "values": []},
-            "Keyword": {"type": "Entry", "values": []},
+            "Type": {"type": "CheckListComoboBox", "values": ["Type 1", "Type 2"]},
+            "Date": {"type": "Entry", "values": []},
+            "Currencies": {"type": "Entry", "values": []},
+            "Profile": {"type": "Entry", "values": []},
+            "Profit": {"type": "Entry", "values": []},
         }
 
         self.data_entry_root_Frame = Frame(self.working_area_canvas,bg=Colors__.color()["navigation bar"]["selected tab"],height=650-32,width=350,border=0,borderwidth=0,highlightthickness=0)
@@ -98,6 +81,7 @@ class AddNewTask:
                 self.add_new_data_widget[each_info]["insert_data"].pack(side=RIGHT,anchor=E,ipady=4)
                 self.add_new_data_widget[each_info]["insert_data"]["value"] = self.entry_widget_info[each_info]["values"]
 
+
             elif self.entry_widget_info[each_info]["type"] == "Entry":
                 self.add_new_data_widget[each_info]["insert_data"] = ttk.Entry(self.add_new_data_widget[each_info]["frame"], width=16+2, font=("Arial", "12", "normal"))
                 self.add_new_data_widget[each_info]["insert_data"].pack(side=RIGHT,anchor=E,ipady=4,ipadx=2)
@@ -117,29 +101,33 @@ class AddNewTask:
                     
                 resultString.removesuffix(", ")
 
+
         save_btn_obj = TkWidget()
         save_btn = save_btn_obj.image_btn(self.data_entry_root_Frame , imgTk=image__.icons("save".lower()), imgTk_hover=image__.icons("save".lower()+"_hover"), dimension= (107+10,35+10), bg = Colors__.color()["navigation bar"]["selected tab"], activebackground = Colors__.color()["navigation bar"]["selected tab"])
         save_btn.pack()
         save_btn["command"] = self.save_btn_action
 
 
+
+
+
     def save_btn_action(self):
         '''
-        Within this function, It will be adding  data  to  the  task
-        table and positioning it at the bottom of the task  tab. The
+        Within this function, It will be adding  data  to  the  capture
+        table and positioning it at the bottom of the capture  tab. The
         display_data dictionary contains the  information  that will
-        be displayed in the task table, and  it  must align with the
+        be displayed in the capture table, and  it  must align with the
         keys present in self.entry_widget_info.
         '''
         
         display_data = {
-            "ID": self.new_task_id,
-            "Website": "",
-            "Size": "",
-            "Keyword": "",
-            "Proxy": "",
-            "Billing Profile": "",
-            "Status": "",
+            "ID": self.new_capture_id,
+            "Type": "",
+            "Date": "",
+            "Currencies": "",
+            "Profile": "",
+            "Profit": "",
+            "Status":"",
         }
 
         for each_widget_data in list(display_data.keys())[1:-1]:
@@ -149,20 +137,16 @@ class AddNewTask:
         display_data["Status"] = "New"
         self.tab_property.individual_data(self.data_show_frame, display_data)
 
-        # New task adding to DB
-        # task_tab_action_add_new_data_to_DB(display_data)
+        # New capture adding to DB
+        # capture_tab_action_add_new_data_to_DB(display_data)
+
 
         self.window.destroy()
 
 
 
 
-
 if __name__ == "__main__":
     root = Tk()
-    AddNewTask(root)
+    AddNewCapture(root)
     root.mainloop()
-
-
-
-
