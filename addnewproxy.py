@@ -1,9 +1,11 @@
 from tkinter import *
 from tkinter import ttk
+from storeproxy import StoreProxy
 from window import *
 from navigationbar import  *
 from tksupport import *
 from checklistcombobox import *
+import pickle
 # from tabs.actions import proxy_tab_action_add_new_data_to_DB
 #
 class AddNewProxy:
@@ -106,7 +108,13 @@ class AddNewProxy:
         save_btn["command"] = self.save_btn_action
 
 
-
+        try:
+            # for reading also binary mode is important
+            with open('proxiesfile.txt', 'rb') as fp:
+                n_list = pickle.load(fp)
+                return n_list
+        except:
+            pass
 
 
     def save_btn_action(self):
@@ -117,9 +125,25 @@ class AddNewProxy:
         be displayed in the proxy table, and  it  must align with the
         keys present in self.entry_widget_info.
         '''
-        
+        proxies = []
+        try:
+            # for reading also binary mode is important
+            with open('proxiesfile.txt', 'rb') as fp:
+                n_list = pickle.load(fp)
+                proxies = n_list
+        except:
+            proxies = []
+
+
+        proxy_id = "1"
+        try:
+            for proxy in proxies:
+                proxy_id = str(int(proxy.proxy_id) + 1)
+        except:
+            proxy_id = "1"
+
         display_data = {
-            "ID": self.new_proxy_id,
+            "ID": proxy_id,
             "Proxy IP": "",
             "Proxy Port": "",
             "Proxy Username": "",
@@ -133,12 +157,20 @@ class AddNewProxy:
         # Set Initial Status
         display_data["Status"] = "New"
         self.tab_property.individual_data(self.data_show_frame, display_data)
+        
+        proxies.append(StoreProxy(proxy_id, display_data["Proxy IP"], display_data["Proxy Port"], display_data["Proxy Username"], display_data["Proxy Password"]))
+
+        # store list in binary file so 'wb' mode
+        with open('proxiesfile.txt', 'wb') as fp:
+            pickle.dump(proxies, fp)
+            print('Done writing list into a binary file')
 
         # New proxy adding to DB
         # proxy_tab_action_add_new_data_to_DB(display_data)
 
-
+        print('Closing file')
         self.window.destroy()
+        print('Closed file')
 
 
 

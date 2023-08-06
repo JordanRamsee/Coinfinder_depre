@@ -36,18 +36,43 @@ class ProxyTab:
         provided,  as  the  display_data  dictionary   keys  remains 
         unchanged. 
         '''
-        for i in range(25):
+
+        proxies = []
+        try:
+            # for reading also binary mode is important
+            with open('proxiesfile.txt', 'rb') as fp:
+                n_list = pickle.load(fp)
+                proxies = n_list
+        except:
+            proxies = []
+
+        for proxy in proxies:
             display_data = {
                 "Selector": "",
-                "ID": str(i),
-                "Proxy IP": "",
-                "Proxy Port": "",
-                "Proxy Username": "",
-                "Proxy Password": "",
+                "ID": proxy.proxy_id,
+                "Proxy IP": proxy.proxy_ip,
+                "Proxy Port": proxy.proxy_port,
+                "Proxy Username": proxy.proxy_username,
+                "Proxy Password": proxy.proxy_password,
                 "Actions": "",
             }
             # Function that import data
             self.tab_property.individual_data(self.data_show_frame, display_data)
+
+
+
+        # for i in range(25):
+        #     display_data = {
+        #         "Selector": "",
+        #         "ID": str(i),
+        #         "Proxy IP": "",
+        #         "Proxy Port": "",
+        #         "Proxy Username": "",
+        #         "Proxy Password": "",
+        #         "Actions": "",
+        #     }
+        #     # Function that import data
+        #     self.tab_property.individual_data(self.data_show_frame, display_data)
 
     def total_control_panel(self,frame):
         # Total Control button

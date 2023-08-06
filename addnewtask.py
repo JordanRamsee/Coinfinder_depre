@@ -149,6 +149,11 @@ class AddNewTask:
         display_data["Status"] = "New"
         self.tab_property.individual_data(self.data_show_frame, display_data)
 
+        for data in display_data.keys():
+            print(data)
+
+        for data in display_data.values():
+            print(data)
         # New task adding to DB
         # task_tab_action_add_new_data_to_DB(display_data)
 

@@ -49,7 +49,3 @@ if __name__ == "__main__":
     # Check if the Flask thread is still running
     if flask_thread.is_alive():
         os._exit(0)  # Exit the script forcibly
-
-
-
-

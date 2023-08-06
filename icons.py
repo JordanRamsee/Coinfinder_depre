@@ -154,9 +154,9 @@ class image__:
         elif name == "task_hover": return tab_button_icon(icon=Image.open("./res/icons/tabs/task_hover.png"),text="Tasks",text_bg=Colors__.color()["navigation bar"]["fg"]["hover"],img_width=193)
         elif name == "task_selected": return tab_button_icon(icon=Image.open("./res/icons/tabs/task_selected.png"),text="Tasks",text_bg=Colors__.color()["navigation bar"]["fg"]["selected"],img_width=193)
 
-        elif name == "billing": return tab_button_icon(icon=Image.open("./res/icons/tabs/billing.png"),text="Billings",text_bg=Colors__.color()["navigation bar"]["fg"]["normal"],img_width=193)
-        elif name == "billing_hover": return tab_button_icon(icon=Image.open("./res/icons/tabs/billing_hover.png"),text="Billings",text_bg=Colors__.color()["navigation bar"]["fg"]["hover"],img_width=193)
-        elif name == "billing_selected": return tab_button_icon(icon=Image.open("./res/icons/tabs/billing_selected.png"),text="Billings",text_bg=Colors__.color()["navigation bar"]["fg"]["selected"],img_width=193)
+        elif name == "billing": return tab_button_icon(icon=Image.open("./res/icons/tabs/billing.png"),text="API Keys",text_bg=Colors__.color()["navigation bar"]["fg"]["normal"],img_width=193)
+        elif name == "billing_hover": return tab_button_icon(icon=Image.open("./res/icons/tabs/billing_hover.png"),text="API Keys",text_bg=Colors__.color()["navigation bar"]["fg"]["hover"],img_width=193)
+        elif name == "billing_selected": return tab_button_icon(icon=Image.open("./res/icons/tabs/billing_selected.png"),text="API Keys",text_bg=Colors__.color()["navigation bar"]["fg"]["selected"],img_width=193)
 
         elif name == "proxies": return tab_button_icon(icon=Image.open("./res/icons/tabs/proxies.png"),text="Proxies",text_bg=Colors__.color()["navigation bar"]["fg"]["normal"],img_width=174)
         elif name == "proxies_hover": return tab_button_icon(icon=Image.open("./res/icons/tabs/proxies_hover.png"),text="Proxies",text_bg=Colors__.color()["navigation bar"]["fg"]["hover"],img_width=174)
@@ -166,9 +166,9 @@ class image__:
         elif name == "capture_hover": return tab_button_icon(icon=Image.open("./res/icons/tabs/capture_hover.png"),text="Capture",text_bg=Colors__.color()["navigation bar"]["fg"]["hover"],img_width=184)
         elif name == "capture_selected": return tab_button_icon(icon=Image.open("./res/icons/tabs/capture_selected.png"),text="Capture",text_bg=Colors__.color()["navigation bar"]["fg"]["selected"],img_width=184)
 
-        elif name == "settings": return tab_button_icon(icon=Image.open("./res/icons/tabs/settings.png"),text="Settings",text_bg=Colors__.color()["navigation bar"]["fg"]["normal"],img_width=172)
-        elif name == "settings_hover": return tab_button_icon(icon=Image.open("./res/icons/tabs/settings_hover.png"),text="Settings",text_bg=Colors__.color()["navigation bar"]["fg"]["hover"],img_width=172)
-        elif name == "settings_selected": return tab_button_icon(icon=Image.open("./res/icons/tabs/settings_selected.png"),text="Settings",text_bg=Colors__.color()["navigation bar"]["fg"]["selected"],img_width=172)
+        elif name == "settings": return tab_button_icon(icon=Image.open("./res/icons/tabs/settings.png"),text="TEST",text_bg=Colors__.color()["navigation bar"]["fg"]["normal"],img_width=172)
+        elif name == "settings_hover": return tab_button_icon(icon=Image.open("./res/icons/tabs/settings_hover.png"),text="TEST",text_bg=Colors__.color()["navigation bar"]["fg"]["hover"],img_width=172)
+        elif name == "settings_selected": return tab_button_icon(icon=Image.open("./res/icons/tabs/settings_selected.png"),text="TEST",text_bg=Colors__.color()["navigation bar"]["fg"]["selected"],img_width=172)
 
 
         # Control

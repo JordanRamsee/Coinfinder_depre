@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+
 from window import *
 from navigationbar import  *
 from tksupport import *
@@ -34,11 +35,11 @@ class AddNewBilling:
 
     def property(self):
 
-        test = ["testing", "mesting", "besting", "resting"]
+        # test = ["testing", "mesting", "besting", "resting"]
         self.entry_widget_info = {
-            "Billing Profile": {"type": "CheckListComoboBox", "values": ["Profile1", "Profile2", "Profile3", "Profile4"]},
-            "Name On Card": {"type": "Entry", "values": []},
-            "Email": {"type": "Entry", "values": []},
+            "Exchange": {"type": "ComboBox", "values": ["Binance", "Binance US", "Bitfinex", "Bitget", "Bitstamp", "Bybit", "Coinbase", "Gate.io", "Gemini", "Huobi", "Kraken", "Kucoin", "OKX"]},
+            "API Key": {"type": "Entry", "values": []},
+            "Secret Key": {"type": "Entry", "values": []},
             "Shipping Address": {"type": "CheckListComoboBox", "values": ["USA", "UK", "Canada"]},
         }
 
