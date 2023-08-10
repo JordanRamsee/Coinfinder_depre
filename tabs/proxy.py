@@ -59,28 +59,11 @@ class ProxyTab:
             # Function that import data
             self.tab_property.individual_data(self.data_show_frame, display_data)
 
-
-
-        # for i in range(25):
-        #     display_data = {
-        #         "Selector": "",
-        #         "ID": str(i),
-        #         "Proxy IP": "",
-        #         "Proxy Port": "",
-        #         "Proxy Username": "",
-        #         "Proxy Password": "",
-        #         "Actions": "",
-        #     }
-        #     # Function that import data
-        #     self.tab_property.individual_data(self.data_show_frame, display_data)
-
     def total_control_panel(self,frame):
         # Total Control button
         self.control_btns_details = {
             "add_new_proxy": {"dimension": (138 + 10, 32+10)},
             "delete_all": {"dimension": (129 + 10, 32 + 10)},
-            "run_all": {"dimension": (114+10, 32+10)},
-            "stop_all": {"dimension": (114+10, 32+10)},
         }
 
         self.left_control_frmae = Frame(frame, bg=Colors__.color()["working space"]["bg"], border=0, borderwidth=0, highlightthickness=0)

@@ -1,5 +1,7 @@
+import pickle
 from tkinter import *
 from tkinter import ttk
+from storebilling import StoreBilling
 
 from window import *
 from navigationbar import  *
@@ -38,9 +40,8 @@ class AddNewBilling:
         # test = ["testing", "mesting", "besting", "resting"]
         self.entry_widget_info = {
             "Exchange": {"type": "ComboBox", "values": ["Binance", "Binance US", "Bitfinex", "Bitget", "Bitstamp", "Bybit", "Coinbase", "Gate.io", "Gemini", "Huobi", "Kraken", "Kucoin", "OKX"]},
-            "API Key": {"type": "Entry", "values": []},
+            "Public Key": {"type": "Entry", "values": []},
             "Secret Key": {"type": "Entry", "values": []},
-            "Shipping Address": {"type": "CheckListComoboBox", "values": ["USA", "UK", "Canada"]},
         }
 
         self.data_entry_root_Frame = Frame(self.working_area_canvas,bg=Colors__.color()["navigation bar"]["selected tab"],height=650-32,width=350,border=0,borderwidth=0,highlightthickness=0)
@@ -118,23 +119,61 @@ class AddNewBilling:
         be displayed in the task table, and  it  must align with the
         keys present in self.entry_widget_info.
         '''
-        
+        billings = []
+        try:
+            # for reading also binary mode is important
+            with open('billingsfile.txt', 'rb') as fp:
+                n_list = pickle.load(fp)
+                billings = n_list
+        except:
+            billings = []
+
+
+        billing_id = "1"
+        try:
+            for billing in billings:
+                billing_id = str(int(billing.key_id) + 1)
+        except:
+            billing_id = "1"
+     
         display_data = {
-            "ID": self.new_billing_id,
-            "Billing Profile": "",
-            "Name On Card": "",
-            "Email": "",
-            "Shipping Address": "",
+            "ID": billing_id,
+            "Exchange": "",
+            "Public Key": "",
+            "Secret Key": "",
             "Status": "",
         }
+
 
         for each_widget_data in list(display_data.keys())[1:-1]:
             display_data[each_widget_data] = str(self.add_new_data_widget[each_widget_data]["insert_data"].get()).strip()
 
         # Set Initial Status
         display_data["Status"] = "New"
+
+        unedited_secret_key = display_data["Secret Key"]
+        unedited_public_key = display_data["Public Key"]
+        
+        edited_secret_key = "******" + (display_data["Secret Key"][-4:])
+        edited_public_key = "******" +  (display_data["Public Key"][-4:])
+
+        display_data["Secret Key"] = edited_secret_key
+        display_data["Public Key"] = edited_public_key
+
         self.tab_property.individual_data(self.data_show_frame, display_data)
 
+        display_data["Secret Key"] = unedited_secret_key
+        display_data["Public Key"] = unedited_public_key
+
+
+        billings.append(StoreBilling(billing_id, display_data["Exchange"], display_data["Public Key"], display_data["Secret Key"]))
+
+        
+        # store list in binary file so 'wb' mode
+        with open('billingsfile.txt', 'wb') as fp:
+            pickle.dump(billings, fp)
+            print('Done writing list into a binary file')
+        
         # New task adding to DB
         # task_tab_action_add_new_data_to_DB(display_data)
 

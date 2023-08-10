@@ -21,11 +21,10 @@ class BillingTab:
         self.column_data_details = {
             "Selector": {"width": 50, "text_align": CENTER, "anchor": "center"},
             "ID": {"width": 100, "text_align": LEFT, "anchor": "center"},
-            "Billing Profile": {"width": 230, "text_align": LEFT, "anchor": W},
-            "Name On Card": {"width": 120+130, "text_align": LEFT, "anchor": W},
-            "Email": {"width": 180+56, "text_align": LEFT, "anchor": W},
-            "Shipping Address": {"width": 150+150, "text_align": CENTER, "anchor": W},
-            "Actions": {"width": 112, "text_align": LEFT, "anchor": W},
+            "Exchange": {"width": 120+130, "text_align": LEFT, "anchor": W},
+            "Public Key": {"width": 180+56, "text_align": LEFT, "anchor": W},
+            "Secret Key": {"width": 150+150, "text_align": CENTER, "anchor": W},
+            "Actions": {"width": 342, "text_align": LEFT, "anchor": W},
         }
 
         self.tab_property = TabProperty(self.base_canvas)
@@ -44,16 +43,29 @@ class BillingTab:
         provided,  as  the  display_data  dictionary   keys  remains 
         unchanged. 
         '''
-        for i in range(25):
+
+        billings = []
+        try:
+            # for reading also binary mode is important
+            with open('billingsfile.txt', 'rb') as fp:
+                n_list = pickle.load(fp)
+                billings = n_list
+        except:
+            billings = []
+
+
+        for billing in billings:
+            public_key = "******" + billing.public_key[-4:]
+            secret_key = "******" + billing.secret_key[-4:]
             display_data = {
                 "Selector": "",
-                "ID": str(i),
-                "Billing Profile": "",
-                "Name On Card": "",
-                "Email": "",
-                "Shipping Address": "",
+                "ID": billing.key_id,
+                "Exchange": billing.exchange,
+                "Public Key": public_key,
+                "Secret Key": secret_key,
                 "Actions": "",
             }
+
             # Function that import data
             self.tab_property.individual_data(self.data_show_frame, display_data)
 
@@ -62,8 +74,8 @@ class BillingTab:
         self.control_btns_details = {
             "add_new_billing": {"dimension": (138 + 10, 32+10)},
             "delete_all": {"dimension": (129 + 10, 32 + 10)},
-            "run_all": {"dimension": (114+10, 32+10)},
-            "stop_all": {"dimension": (114+10, 32+10)},
+
+
         }
 
         self.left_control_frmae = Frame(frame, bg=Colors__.color()["working space"]["bg"], border=0, borderwidth=0, highlightthickness=0)
