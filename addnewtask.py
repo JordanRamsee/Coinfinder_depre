@@ -16,8 +16,10 @@
 └──────────────────────────────────────────────────────────┘
 """
 
+import pickle
 from tkinter import *
 from tkinter import ttk
+from storetask import StoreTask
 from window import *
 from navigationbar import  *
 from tksupport import *
@@ -51,13 +53,57 @@ class AddNewTask:
 
     def property(self):
 
-        test = ["testing", "mesting", "besting", "resting"]
+        billings = []
+        api_dropdown_values = []
+
+        # Read stored list of api key objects 
+        with open("billingsfile.txt", "rb") as score_file:
+            billings = []
+            while True:
+                try:
+                    billings.append(pickle.load(score_file))
+                except EOFError:
+                    break
+        
+        # Checks to see if the list is empty, if it's pass and if it's not then add the id and exchange to the dropdown value
+        if not billings:
+            pass
+        else:
+            for billing in billings:
+                for bill in billing:
+                    api_dropdown_values.append(bill.key_id + '. ' + bill.exchange)
+
+
+        proxies = []
+        proxy_dropdown_values = []
+        
+        with open("proxiesfile.txt", "rb") as proxy_file:
+            proxies = []
+            while True:
+                try:
+                    proxies.append(pickle.load(proxy_file))
+                except EOFError:
+                    break
+        
+        if not proxies:
+            pass
+        else:
+            for proxyObject in proxies:
+                for proxy in proxyObject:
+                    proxy_dropdown_values.append(proxy.proxy_ip + ':' + proxy.proxy_port)
+
+
+
         self.entry_widget_info = {
-            "Website": {"type": "CheckListComoboBox", "values": ["FinishLine/JD Sports US", "Footsites (US)", "Footsites (EU)", "Supreme (US)", "Supreme (EU)", "Demandware", "Yeezy Supply", "Kith EU", "Kith US"]},
-            "Billing Profile": {"type": "CheckListComoboBox", "values": ["Profile 1", "Profile 2", "Profile 3", "Profile 4"]},
-            "Proxy": {"type": "Entry", "values": []},
-            "Size": {"type": "Entry", "values": []},
-            "Keyword": {"type": "Entry", "values": []},
+            # "Website": {"type": "CheckListComoboBox", "values": ["FinishLine/JD Sports US", "Footsites (US)", "Footsites (EU)", "Supreme (US)", "Supreme (EU)", "Demandware", "Yeezy Supply", "Kith EU", "Kith US"]},
+            # "Billing Profile": {"type": "CheckListComoboBox", "values": ["Profile 1", "Profile 2", "Profile 3", "Profile 4"]},
+            # "Proxy": {"type": "Entry", "values": []},
+            # "Size": {"type": "Entry", "values": []},
+            # "Keyword": {"type": "Entry", "values": []},
+            "Exchanges": {"type": "CheckListComoboBox", "values": api_dropdown_values},
+            "Proxy": {"type": "ComboBox", "values": proxy_dropdown_values},
+            "Crypto Pairs": {"type": "CheckListComoboBox", "values": ["All", "Large Cap"]},
+            "Exchanges for Proxy" : {"type": "ComboBox", "values": ["All", "None"]},
         }
 
         self.data_entry_root_Frame = Frame(self.working_area_canvas,bg=Colors__.color()["navigation bar"]["selected tab"],height=650-32,width=350,border=0,borderwidth=0,highlightthickness=0)
@@ -131,15 +177,30 @@ class AddNewTask:
         be displayed in the task table, and  it  must align with the
         keys present in self.entry_widget_info.
         '''
+
+        tasks = []
+        try:
+            # for reading also binary mode is important
+            with open('tasksfile.txt', 'rb') as fp:
+                n_list = pickle.load(fp)
+                proxies = n_list
+        except:
+            tasks = []
+
+
+        task_id = "1"
+        try:
+            for task in tasks:
+                task_id = str(int(task.task_id) + 1)
+        except:
+            task_id = "1"
         
         display_data = {
             "ID": self.new_task_id,
-            "Website": "",
-            "Size": "",
-            "Keyword": "",
+            "Exchanges": "",
             "Proxy": "",
-            "Billing Profile": "",
-            "Status": "",
+            "Crypto Pairs": "",
+            "Exchanges for Proxy": ""
         }
 
         for each_widget_data in list(display_data.keys())[1:-1]:
@@ -149,11 +210,16 @@ class AddNewTask:
         display_data["Status"] = "New"
         self.tab_property.individual_data(self.data_show_frame, display_data)
 
-        for data in display_data.keys():
-            print(data)
 
-        for data in display_data.values():
-            print(data)
+        tasks.append(StoreTask(task_id, display_data["Exchanges"], display_data["Proxy"], display_data["Crypto Pairs"], display_data["Exchanges for Proxy"]))
+
+
+        # store list in binary file so 'wb' mode
+        with open('tasksfile.txt', 'wb') as fp:
+            pickle.dump(tasks, fp)
+            print('Done writing list into a binary file')
+
+
         # New task adding to DB
         # task_tab_action_add_new_data_to_DB(display_data)
 

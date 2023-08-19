@@ -22,11 +22,10 @@ class CaptureTab:
         self.column_data_details = {
             "Selector": {"width": 50, "text_align": CENTER, "anchor": "center"},
             "ID": {"width": 100, "text_align": LEFT, "anchor": "center"},
-            "Type": {"width": 180+230, "text_align": CENTER, "anchor": "center"},
-            "Date": {"width": 120, "text_align": LEFT, "anchor": "center"},
-            "Currencies": {"width": 230, "text_align": LEFT, "anchor": W},
-            "Profile": {"width": 120, "text_align": LEFT, "anchor": W},
-            "Profit": {"width": 150+120, "text_align": LEFT, "anchor": W}
+            "Coin": {"width": 180+230, "text_align": CENTER, "anchor": "center"},
+            "Amount": {"width": 180, "text_align": LEFT, "anchor": "center"},
+            "Date": {"width": 290, "text_align": LEFT, "anchor": W},
+            "Actions": {"width": 150+120, "text_align": LEFT, "anchor": W}
         }
 
         self.tab_property = TabProperty(self.base_canvas)
@@ -44,26 +43,47 @@ class CaptureTab:
         provided,  as  the  display_data  dictionary   keys  remains 
         unchanged. 
         '''
-        for i in range(25):
+        # for i in range(25):
+        #     display_data = {
+        #         "Selector": "",
+        #         "ID": str(i),
+        #         "Coin": "",
+        #         "Amount": "",
+        #         "Date": "",
+        #         "Actions": "",
+        #     }
+        #     # Function that import data
+        #     self.tab_property.individual_data(self.data_show_frame, display_data)
+
+        captures = []
+        try:
+            # for reading also binary mode is important
+            with open('capturesfile.txt', 'rb') as fp:
+                n_list = pickle.load(fp)
+                captures = n_list
+        except:
+            captures = []
+
+        for capture in captures:
             display_data = {
                 "Selector": "",
-                 "ID": str(i),
-                "Type": "",
-                "Date": "",
-                "Currencies": "",
-                "Profile": "",
-                "Profit": ""
+                "ID": capture.capture_id,
+                "Coin": capture.coin,
+                "Amount": capture.amount,
+                "Date": capture.date,
+                "Actions": "",
             }
             # Function that import data
             self.tab_property.individual_data(self.data_show_frame, display_data)
+
+
 
     def total_control_panel(self,frame):
         # Total Control button
         self.control_btns_details = {
             "add_new_capture": {"dimension": (138 + 10, 32+10)},
             "delete_all": {"dimension": (129 + 10, 32 + 10)},
-            "run_all": {"dimension": (114+10, 32+10)},
-            "stop_all": {"dimension": (114+10, 32+10)},
+
         }
         self.left_control_frmae = Frame(frame, bg=Colors__.color()["working space"]["bg"], border=0, borderwidth=0, highlightthickness=0)
         self.left_control_frmae.pack(side=LEFT, anchor=W)

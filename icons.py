@@ -162,9 +162,9 @@ class image__:
         elif name == "proxies_hover": return tab_button_icon(icon=Image.open("./res/icons/tabs/proxies_hover.png"),text="Proxies",text_bg=Colors__.color()["navigation bar"]["fg"]["hover"],img_width=174)
         elif name == "proxies_selected": return tab_button_icon(icon=Image.open("./res/icons/tabs/proxies_selected.png"),text="Proxies",text_bg=Colors__.color()["navigation bar"]["fg"]["selected"],img_width=174)
 
-        elif name == "capture": return tab_button_icon(icon=Image.open("./res/icons/tabs/capture.png"),text="Capture",text_bg=Colors__.color()["navigation bar"]["fg"]["normal"],img_width=184)
-        elif name == "capture_hover": return tab_button_icon(icon=Image.open("./res/icons/tabs/capture_hover.png"),text="Capture",text_bg=Colors__.color()["navigation bar"]["fg"]["hover"],img_width=184)
-        elif name == "capture_selected": return tab_button_icon(icon=Image.open("./res/icons/tabs/capture_selected.png"),text="Capture",text_bg=Colors__.color()["navigation bar"]["fg"]["selected"],img_width=184)
+        elif name == "capture": return tab_button_icon(icon=Image.open("./res/icons/tabs/capture.png"),text="Balance",text_bg=Colors__.color()["navigation bar"]["fg"]["normal"],img_width=184)
+        elif name == "capture_hover": return tab_button_icon(icon=Image.open("./res/icons/tabs/capture_hover.png"),text="Balance",text_bg=Colors__.color()["navigation bar"]["fg"]["hover"],img_width=184)
+        elif name == "capture_selected": return tab_button_icon(icon=Image.open("./res/icons/tabs/capture_selected.png"),text="Balance",text_bg=Colors__.color()["navigation bar"]["fg"]["selected"],img_width=184)
 
         elif name == "settings": return tab_button_icon(icon=Image.open("./res/icons/tabs/settings.png"),text="TEST",text_bg=Colors__.color()["navigation bar"]["fg"]["normal"],img_width=172)
         elif name == "settings_hover": return tab_button_icon(icon=Image.open("./res/icons/tabs/settings_hover.png"),text="TEST",text_bg=Colors__.color()["navigation bar"]["fg"]["hover"],img_width=172)

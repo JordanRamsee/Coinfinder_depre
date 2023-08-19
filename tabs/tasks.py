@@ -14,12 +14,10 @@ class TaskTab:
         self.column_data_details = {
             "Selector": {"width": 35, "text_align": CENTER, "anchor": "center"},
             "ID": {"width": 50, "text_align": LEFT, "anchor": "center"},
-            "Website": {"width": 280 + 100, "text_align": LEFT, "anchor": W},
-            "Size": {"width": 80, "text_align": LEFT, "anchor": W},
-            "Keyword": {"width": 100, "text_align": LEFT, "anchor": W},
-            "Proxy": {"width": 150, "text_align": CENTER, "anchor": W},
-            "Billing Profile": {"width": 200, "text_align": LEFT, "anchor": W},
-            "Status": {"width": 100, "text_align": CENTER, "anchor": W},
+            "Exchanges": {"width": 280 + 100, "text_align": LEFT, "anchor": W},
+            "Proxy": {"width": 180, "text_align": LEFT, "anchor": W},
+            "Crypto Pairs": {"width": 200, "text_align": LEFT, "anchor": W},
+            "Exchanges for Proxy": {"width": 250, "text_align": LEFT, "anchor": W},
             "Actions": {"width": 160, "text_align": LEFT, "anchor": W},
         }
 
@@ -38,17 +36,27 @@ class TaskTab:
         provided,  as  the  display_data  dictionary   keys  remains 
         unchanged. 
         '''
-        for i in range(25):
+        tasks = []
+        try:
+            # for reading also binary mode is important
+            with open('tasksfile.txt', 'rb') as fp:
+                n_list = pickle.load(fp)
+                tasks = n_list
+        except:
+            tasks = []
+
+        for task in tasks:
             display_data = {
-                "ID": str(i+1),
-                "Website": "",
-                "Size": "",
-                "Keyword": "",
-                "Proxy": "",
-                "Billing Profile": "",
-                "Status": "",
+                "Selector": "",
+                "ID": task.task_id,
+                "Exchanges": task.exchanges,
+                "Proxy": task.proxy,
+                "Crypto Pairs": task.crypto_pair,
+                "Exchanges for Proxy": task.proxy_exchanges,
+                "Actions": "",
             }
-            self.tab_property.individual_data(self.data_show_frame,display_data)
+            # Function that import data
+            self.tab_property.individual_data(self.data_show_frame, display_data)
 
 
 

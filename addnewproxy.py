@@ -150,6 +150,9 @@ class AddNewProxy:
             "Proxy Password": "",
             "Status": "",
         }
+        
+
+
 
         for each_widget_data in list(display_data.keys())[1:-1]:
             display_data[each_widget_data] = str(self.add_new_data_widget[each_widget_data]["insert_data"].get()).strip()

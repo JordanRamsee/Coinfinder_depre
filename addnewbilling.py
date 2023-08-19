@@ -125,6 +125,7 @@ class AddNewBilling:
             with open('billingsfile.txt', 'rb') as fp:
                 n_list = pickle.load(fp)
                 billings = n_list
+                print(billings)
         except:
             billings = []
 

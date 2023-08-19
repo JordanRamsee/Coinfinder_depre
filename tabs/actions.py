@@ -1,4 +1,5 @@
 # from addnewtask import *
+import pickle
 from addnewtask import AddNewTask
 from addnewbilling import AddNewBilling
 from addnewproxy import AddNewProxy
@@ -45,6 +46,28 @@ def task_tab_action_delete(task_data: dict):
     This function oversees the action executed  when  the  delete
     button for an individual task in the task tab is pressed.
     '''
+
+    tasks = []
+    try:
+        # for reading also binary mode is important
+        with open('tasksfile.txt', 'rb') as fp:
+            n_list = pickle.load(fp)
+            tasks = n_list
+    except:
+        tasks = []
+
+    for task in tasks:
+        if task.task_id == task_data['ID']:
+            tasks.remove(task)
+        else:
+            pass
+    
+    with open('tasksfile.txt', 'wb') as fp:
+        pickle.dump(tasks, fp)
+        print('Done writing list into a binary file')
+
+
+
     print(f"Task Tab , Task ID {task_data['ID']} Deleted")
 
 def task_tab_action_add_new_task(root_window,data_show_frame,tab_property):
@@ -59,6 +82,26 @@ def billing_tab_action_delete(task_data: dict):
     This function oversees the action executed  when  the  delete
     button for an individual biller in the billing tab is pressed.
     '''
+
+    billings = []
+    try:
+        # for reading also binary mode is important
+        with open('billingsfile.txt', 'rb') as fp:
+            n_list = pickle.load(fp)
+            billings = n_list
+    except:
+        billings = []
+
+    for billing in billings:
+        if billing.key_id == task_data['ID']:
+            billings.remove(billing)
+        else:
+            pass
+    
+    with open('billingsfile.txt', 'wb') as fp:
+        pickle.dump(billings, fp)
+        print('Done writing list into a binary file')
+
     print(f"Billing Tab , Billing ID {task_data['ID']} Deleted")
 
 def billing_tab_action_edit(task_data: dict,column_data:dict):
@@ -120,6 +163,27 @@ def proxies_tab_action_delete(proxy_data: dict):
     This function oversees the action executed  when  the  delete
     button for an individual proxy in the proxy tab is pressed.
     '''
+
+    proxies = []
+    try:
+        # for reading also binary mode is important
+        with open('proxiesfile.txt', 'rb') as fp:
+            n_list = pickle.load(fp)
+            proxies = n_list
+    except:
+        proxies = []
+
+    for proxy in proxies:
+        if proxy.proxy_id == proxy_data['ID']:
+            proxies.remove(proxy)
+        else:
+            pass
+    
+    with open('proxiesfile.txt', 'wb') as fp:
+        pickle.dump(proxies, fp)
+        print('Done writing list into a binary file')
+
+
     print(f"Proxies Tab , Proxy ID {proxy_data['ID']} Deleted")
 
 def proxies_tab_action_add_new_proxy(root_window,data_show_frame,tab_property):
@@ -167,7 +231,26 @@ def captures_tab_action_delete(capture_data: dict):
     '''
     This function oversees the action executed  when  the  delete
     button for an individual proxy in the proxy tab is pressed.
-    '''
+    '''  
+    captures = []
+    try:
+        # for reading also binary mode is important
+        with open('capturesfile.txt', 'rb') as fp:
+            n_list = pickle.load(fp)
+            captures = n_list
+    except:
+        captures = []
+
+    for capture in captures:
+        if capture.capture_id == capture_data['ID']:
+            captures.remove(capture)
+        else:
+            pass
+    
+    with open('capturesfile.txt', 'wb') as fp:
+        pickle.dump(captures, fp)
+        print('Done writing list into a binary file')
+
     print(f"Captures Tab , Capture ID {capture_data['ID']} Deleted")
 
 def captures_tab_action_add_new_capture(root_window,data_show_frame,tab_property):

@@ -74,8 +74,6 @@ class BillingTab:
         self.control_btns_details = {
             "add_new_billing": {"dimension": (138 + 10, 32+10)},
             "delete_all": {"dimension": (129 + 10, 32 + 10)},
-
-
         }
 
         self.left_control_frmae = Frame(frame, bg=Colors__.color()["working space"]["bg"], border=0, borderwidth=0, highlightthickness=0)

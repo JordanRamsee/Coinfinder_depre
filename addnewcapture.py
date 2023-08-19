@@ -1,9 +1,13 @@
+import pickle
 from tkinter import *
 from tkinter import ttk
 from window import *
 from navigationbar import  *
 from tksupport import *
 from checklistcombobox import *
+import ccxt
+from storebilling import StoreBilling
+from storeproxy import StoreProxy
 
 # from tabs.actions import proxy_tab_action_add_new_data_to_DB
 #
@@ -34,13 +38,50 @@ class AddNewCapture:
 
     def property(self):
 
-        test = ["testing", "mesting", "besting", "resting"]
+        # Loop through all the api keys and add them to the dropdown window
+        billings = []
+        api_dropdown_values = []
+
+        # Read stored list of api key objects 
+        with open("billingsfile.txt", "rb") as score_file:
+            billings = []
+            while True:
+                try:
+                    billings.append(pickle.load(score_file))
+                except EOFError:
+                    break
+        
+        # Checks to see if the list is empty, if it's pass and if it's not then add the id and exchange to the dropdown value
+        if not billings:
+            pass
+        else:
+            for billing in billings:
+                for bill in billing:
+                    api_dropdown_values.append(bill.key_id + '. ' + bill.exchange)
+
+
+        proxies = []
+        proxy_dropdown_values = []
+        
+        with open("proxiesfile.txt", "rb") as proxy_file:
+            proxies = []
+            while True:
+                try:
+                    proxies.append(pickle.load(proxy_file))
+                except EOFError:
+                    break
+        
+        if not proxies:
+            pass
+        else:
+            for proxyObject in proxies:
+                for proxy in proxyObject:
+                    proxy_dropdown_values.append(proxy.proxy_ip + ':' + proxy.proxy_port)
+
+
         self.entry_widget_info = {
-            "Type": {"type": "CheckListComoboBox", "values": ["Type 1", "Type 2"]},
-            "Date": {"type": "Entry", "values": []},
-            "Currencies": {"type": "Entry", "values": []},
-            "Profile": {"type": "Entry", "values": []},
-            "Profit": {"type": "Entry", "values": []},
+            "API Key": {"type": "ComboBox", "values": api_dropdown_values},
+            "Proxy": {"type": "ComboBox", "values": proxy_dropdown_values},
         }
 
         self.data_entry_root_Frame = Frame(self.working_area_canvas,bg=Colors__.color()["navigation bar"]["selected tab"],height=650-32,width=350,border=0,borderwidth=0,highlightthickness=0)
@@ -108,7 +149,27 @@ class AddNewCapture:
         save_btn["command"] = self.save_btn_action
 
 
+        billings = []
+        try:
+            # for reading also binary mode is important
+            with open('billingsfile.txt', 'rb') as fp:
+                n_list = pickle.load(fp)
+                billings = n_list
+                return billings
+        except:
+            billings = []
+            return billings
 
+    def get_balance(self, api_key, proxy):
+        data_list = [{'asset': 'BNB', 'amount': '1000.00000000', 'date': '8/19/2023'},
+                {'asset': 'BTC', 'amount': '1.00000000', 'date': '8/19/2023'},
+                {'asset': 'BUSD', 'amount': '10000.00000000', 'date': '8/19/2023'},
+                {'asset': 'ETH', 'amount': '100.00000000', 'date': '8/19/2023'},
+                {'asset': 'LTC', 'amount': '500.00000000', 'date': '8/19/2023'},
+                {'asset': 'TRX', 'amount': '500000.00000000', 'date': '8/19/2023'},
+                {'asset': 'USDT', 'amount': '10000.00000000', 'date': '8/19/2023'},
+                {'asset': 'XRP', 'amount': '50000.00000000', 'date': '8/19/2023'}]        
+        return data_list
 
 
     def save_btn_action(self):
@@ -119,16 +180,21 @@ class AddNewCapture:
         be displayed in the capture table, and  it  must align with the
         keys present in self.entry_widget_info.
         '''
+
+        
         
         display_data = {
             "ID": self.new_capture_id,
-            "Type": "",
+            "Coin": "",
+            "Amount": "",
             "Date": "",
-            "Currencies": "",
-            "Profile": "",
-            "Profit": "",
-            "Status":"",
+            "Actions": ""
         }
+
+
+        # I NEED THE DATA FROM THE GET BALANCE FUNCTION TO BE DISPLAYED
+        # I NEED TO PASS THE API KEY AND THE PROXY INTO THE FUNCTION
+        data = self.get_balance("api_key", "proxy")
 
         for each_widget_data in list(display_data.keys())[1:-1]:
             display_data[each_widget_data] = str(self.add_new_data_widget[each_widget_data]["insert_data"].get()).strip()

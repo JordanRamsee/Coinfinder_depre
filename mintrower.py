@@ -6,11 +6,14 @@
 │ execution of all other scripts in a  hierarchical manner │
 └──────────────────────────────────────────────────────────┘
 """
+from datetime import date
 from icons import *
 from activate import *
 import threading
 from flaskapp import app
 import os
+
+from storecapture import StoreCapture
 
 class MainWindow:
     def __init__(self):
@@ -30,6 +33,7 @@ def flask_runner():
     app.run()
 
 if __name__ == "__main__":
+
 
     # Set up the flag
     closed_flag = threading.Event()
