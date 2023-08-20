@@ -103,7 +103,7 @@ class AddNewTask:
             "Exchanges": {"type": "CheckListComoboBox", "values": api_dropdown_values},
             "Proxy": {"type": "ComboBox", "values": proxy_dropdown_values},
             "Crypto Pairs": {"type": "CheckListComoboBox", "values": ["All", "Large Cap"]},
-            "Exchanges for Proxy" : {"type": "ComboBox", "values": ["All", "None"]},
+            "Exchanges for Proxy" : {"type": "ComboBox", "values": ["All", "None"]}
         }
 
         self.data_entry_root_Frame = Frame(self.working_area_canvas,bg=Colors__.color()["navigation bar"]["selected tab"],height=650-32,width=350,border=0,borderwidth=0,highlightthickness=0)
@@ -183,7 +183,7 @@ class AddNewTask:
             # for reading also binary mode is important
             with open('tasksfile.txt', 'rb') as fp:
                 n_list = pickle.load(fp)
-                proxies = n_list
+                tasks = n_list
         except:
             tasks = []
 
@@ -196,11 +196,11 @@ class AddNewTask:
             task_id = "1"
         
         display_data = {
-            "ID": self.new_task_id,
+            "ID": task_id,
             "Exchanges": "",
             "Proxy": "",
             "Crypto Pairs": "",
-            "Exchanges for Proxy": ""
+            "Exchanges for Proxy": "",
         }
 
         for each_widget_data in list(display_data.keys())[1:-1]:
