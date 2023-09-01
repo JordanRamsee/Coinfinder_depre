@@ -4,7 +4,7 @@ from addnewtask import AddNewTask
 from addnewbilling import AddNewBilling
 from addnewproxy import AddNewProxy
 from addnewcapture import AddNewCapture
-
+from encryption import decrypt , encrypt
 
 # Task Tab
 def task_tab_action_add_new_data_to_DB(task_data: dict):
@@ -28,18 +28,13 @@ def task_tab_action_terminate(task_data: dict):
     '''
     print(f"Task Tab , Task ID {task_data['ID']} Terminated")
 
-def task_tab_action_edit(task_data: dict, column_data: dict):
-    '''
-    This  function  is  responsible  for  handling   the   action
-    triggered when the edit button for an individual task in  the
-    task   tab   is   pressed.   Simply   update   the  value  of
-    'column_data[each_key]['label']['text']' to display it in the
-    interface.
-    '''
-    print(f"Task Tab , Task ID {task_data['ID']} Edit")
-    for each_key in list(column_data.keys())[1:-1]:
-        column_data[each_key]["label"]["text"] = each_key + "777"
-    print(f"Task Tab , Task ID {task_data['ID']} Edited")
+    
+    
+    
+def delete_all(list_of_tasks):
+    for task in list_of_tasks:
+        task_tab_action_delete(task)
+    
 
 def task_tab_action_delete(task_data: dict):
     '''
@@ -51,7 +46,9 @@ def task_tab_action_delete(task_data: dict):
     try:
         # for reading also binary mode is important
         with open('tasksfile.txt', 'rb') as fp:
-            n_list = pickle.load(fp)
+            data = fp.read()
+            decrypted_data = decrypt(data)
+            n_list = pickle.loads(decrypted_data)
             tasks = n_list
     except:
         tasks = []
@@ -63,16 +60,44 @@ def task_tab_action_delete(task_data: dict):
             pass
     
     with open('tasksfile.txt', 'wb') as fp:
-        pickle.dump(tasks, fp)
+        data = pickle.dumps(tasks)
+        encrypted_data = encrypt(data)
+        fp.write(encrypted_data)
         print('Done writing list into a binary file')
 
 
 
     print(f"Task Tab , Task ID {task_data['ID']} Deleted")
 
-def task_tab_action_add_new_task(root_window,data_show_frame,tab_property):
+
+
+def task_tab_action_edit(task_data: dict, column_data: dict , root_window,data_show_frame,tab_property):
+    '''
+    This  function  is  responsible  for  handling   the   action
+    triggered when the edit button for an individual task in  the
+    task   tab   is   pressed.   Simply   update   the  value  of
+    'column_data[each_key]['label']['text']' to display it in the
+    interface.
+    '''
+    print(f"Task Tab , Task ID {task_data['ID']} Edit")
+    print('=======================')
+    for each_key in list(column_data.keys())[1:-1]:
+        # column_data[each_key]["label"]["text"] = each_key + "777"
+        print(each_key)
+    # print(task_data)
+    print('=======================')
+    print(f"Task Tab , Task ID {task_data['ID']} Edited")
+    AddNewTask(root_window,data_show_frame,tab_property,new_task_id='101' ,  edit = True , task_id = task_data['ID'] , edited_column = column_data )
+    
+
+
+
+def task_tab_action_add_new_task(root_window,data_show_frame,tab_property  ):
     # Need to provide task_id by default 101
-    AddNewTask(root_window,data_show_frame,tab_property,new_task_id='101')
+    # for each_key in list(column_data.keys())[1:-1]:
+        # column_data[each_key]["label"]["text"] = each_key + "777"
+        # print(each_key)
+    AddNewTask(root_window,data_show_frame,tab_property,new_task_id='101' )
 
 
 
@@ -87,7 +112,10 @@ def billing_tab_action_delete(task_data: dict):
     try:
         # for reading also binary mode is important
         with open('billingsfile.txt', 'rb') as fp:
-            n_list = pickle.load(fp)
+            data = fp.read()
+            decrypted_data = decrypt(data)
+            n_list = pickle.loads(decrypted_data)
+            # n_list = pickle.load(fp)
             billings = n_list
     except:
         billings = []
@@ -99,12 +127,14 @@ def billing_tab_action_delete(task_data: dict):
             pass
     
     with open('billingsfile.txt', 'wb') as fp:
-        pickle.dump(billings, fp)
+        data = pickle.dumps(billings)
+        encrypted_data = encrypt(data)
+        fp.write(encrypted_data)
         print('Done writing list into a binary file')
 
     print(f"Billing Tab , Billing ID {task_data['ID']} Deleted")
 
-def billing_tab_action_edit(task_data: dict,column_data:dict):
+def billing_tab_action_edit(task_data: dict,column_data:dict , root_window,data_show_frame,tab_property):
     '''
     This  function  is  responsible  for  handling   the   action
     triggered when the edit button for an individual biller in the
@@ -112,10 +142,11 @@ def billing_tab_action_edit(task_data: dict,column_data:dict):
     'column_data[each_key]['label']['text']' to display it in the
     interface.
     '''
-    print(f"Billing Tab , Task ID {task_data['ID']} Edit")
-    for each_key in list(column_data.keys())[1:-1]:
-        column_data[each_key]["label"]["text"] = each_key+"555"
-    print(f"Billing Tab , Task ID {task_data['ID']} Edited")
+    # print(f"Billing Tab , Task ID {task_data['ID']} Edit")
+    # for each_key in list(column_data.keys())[1:-1]:
+    #     column_data[each_key]["label"]["text"] = each_key+"555"
+    # print(f"Billing Tab , Task ID {task_data['ID']} Edited")
+    AddNewBilling(root_window,data_show_frame,tab_property,new_billing_id='101' , edit = True , task_id = task_data['ID'] , edited_column = column_data)
 
 def billing_tab_action_add_new_billing(root_window,data_show_frame,tab_property):
         # Need to provide billing_id by default 101
@@ -144,7 +175,7 @@ def proxies_tab_action_terminate(proxy_data: dict):
     '''
     print(f"Proxies Tab , Proxy ID {proxy_data['ID']} Terminated")
 
-def proxies_tab_action_edit(proxy_data: dict, column_data: dict):
+def proxies_tab_action_edit(proxy_data: dict, column_data: dict , root_window,data_show_frame,tab_property):
     '''
     This  function  is  responsible  for  handling   the   action
     triggered when the edit button for an individual proxy in  the
@@ -152,11 +183,11 @@ def proxies_tab_action_edit(proxy_data: dict, column_data: dict):
     'column_data[each_key]['label']['text']' to display it in the
     interface.
     '''
-    print(f"Proxies Tab , Proxy ID {proxy_data['ID']} Edit")
-    for each_key in list(column_data.keys())[1:-1]:
-        column_data[each_key]["label"]["text"] = each_key + "777"
-    print(f"Proxies Tab , Proxy ID {proxy_data['ID']} Edited")
-
+    # print(f"Proxies Tab , Proxy ID {proxy_data['ID']} Edit")
+    # for each_key in list(column_data.keys())[1:-1]:
+    #     column_data[each_key]["label"]["text"] = each_key + "777"
+    # print(f"Proxies Tab , Proxy ID {proxy_data['ID']} Edited")
+    AddNewProxy(root_window,data_show_frame,tab_property,new_proxy_id='101' , edit = True , task_id = proxy_data['ID'] , edited_column = column_data)
 
 def proxies_tab_action_delete(proxy_data: dict):
     '''
@@ -178,7 +209,7 @@ def proxies_tab_action_delete(proxy_data: dict):
             proxies.remove(proxy)
         else:
             pass
-    
+    print(proxies)
     with open('proxiesfile.txt', 'wb') as fp:
         pickle.dump(proxies, fp)
         print('Done writing list into a binary file')
@@ -256,3 +287,5 @@ def captures_tab_action_delete(capture_data: dict):
 def captures_tab_action_add_new_capture(root_window,data_show_frame,tab_property):
         # Need to provide task_id by default 101
     AddNewCapture(root_window,data_show_frame,tab_property,new_capture_id='101')
+    
+    

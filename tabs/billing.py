@@ -13,6 +13,7 @@ from icons import *
 from tksupport import *
 from addnewbilling import *
 from tabs.tktabsupport import *
+from encryption import  decrypt
 
 class BillingTab:
     def __init__(self, base_canvas):
@@ -48,7 +49,10 @@ class BillingTab:
         try:
             # for reading also binary mode is important
             with open('billingsfile.txt', 'rb') as fp:
-                n_list = pickle.load(fp)
+                data = fp.read()
+                decrypted_data = decrypt(data)
+                n_list = pickle.loads(decrypted_data)
+               
                 billings = n_list
         except:
             billings = []
@@ -90,7 +94,7 @@ class BillingTab:
             self.total_control_btns[each_control_btn]["btn"].pack(side=LEFT, anchor=W)
         # Add New Task Button Call
         self.total_control_btns["add_new_billing"]["btn"]["command"] = lambda root_=self.base_canvas.winfo_toplevel(), task_tab_frame=self.data_show_frame, details=self.tab_property: billing_tab_action_add_new_billing(root_,task_tab_frame,details)
-
+        self.total_control_btns["delete_all"]["btn"]["command"] =  self.tab_property.delete_all
 
         # Left Control Button's Frame
         for each_control_btn in list(self.control_btns_details.keys())[2:]:

@@ -7,13 +7,18 @@ from window import *
 from navigationbar import  *
 from tksupport import *
 from checklistcombobox import *
+from encryption import encrypt , decrypt
+
 # from tabs.actions import task_tab_action_add_new_data_to_DB
 #
 class AddNewBilling:
-    def __init__(self,root_window,data_show_frame,tab_property,new_billing_id:str=''):
+    def __init__(self,root_window,data_show_frame,tab_property,new_billing_id:str='' ,  edit = False , task_id = 0 , edited_column = None):
         self.new_billing_id = new_billing_id
         self.data_show_frame = data_show_frame
         self.tab_property = tab_property
+        self.edit = edit
+        self.task_id = task_id
+        self.edited_column = edited_column
 
         # Create a window
         self.toplevel_window_obj = TkTopLevel(root_window.winfo_toplevel(),(350, 650))
@@ -112,6 +117,62 @@ class AddNewBilling:
 
 
     def save_btn_action(self):
+        if self.edit:
+            self.save_edited_billing()
+        else:
+            self.add_new_billing_data()
+            
+    def save_edited_billing(self):
+        billings = []
+        # try:
+            # for reading also binary mode is important
+        with open('billingsfile.txt', 'rb') as fp:
+            data = fp.read()
+            decrypted_data = decrypt(data)
+            n_list = pickle.loads(decrypted_data)
+            # n_list = pickle.load(fp)
+            for task in n_list:
+                if self.task_id == task.key_id:
+                    n_list.remove(task)
+                   
+            billings = n_list
+                
+      
+        display_data = {
+            "ID": self.task_id,
+            "Exchange": "",
+            "Public Key": "",
+            "Secret Key": "",
+            "Status": "",
+        }
+        
+        
+        for each_widget_data in list(display_data.keys())[1:-1]:
+            display_data[each_widget_data] = str(self.add_new_data_widget[each_widget_data]["insert_data"].get()).strip()
+
+        
+        billings.append(StoreBilling(self.task_id, display_data["Exchange"], display_data["Public Key"], display_data["Secret Key"]))
+
+        
+        # store list in binary file so 'wb' mode
+        with open('billingsfile.txt', 'wb') as fp:
+            data = pickle.dumps(billings)
+            encrypted_data = encrypt(data)
+            fp.write(encrypted_data)
+            # pickle.dump(billings, fp)
+            print('Done writing list into a binary file')
+
+        self.edited_column["Exchange"]["label"]["text"] = display_data["Exchange"]
+        self.edited_column["Public Key"]["label"]["text"] = "****"+ display_data["Public Key"]
+        self.edited_column["Secret Key"]["label"]["text"] = "****"+ display_data["Secret Key"]
+        self.window.destroy()
+        
+        
+        
+        
+        
+        
+    def add_new_billing_data(self):
         '''
         Within this function, It will be adding  data  to  the  task
         table and positioning it at the bottom of the task  tab. The
@@ -123,9 +184,11 @@ class AddNewBilling:
         try:
             # for reading also binary mode is important
             with open('billingsfile.txt', 'rb') as fp:
-                n_list = pickle.load(fp)
+                data = fp.read()
+                decrypted_data = decrypt(data)
+                n_list = pickle.loads(decrypted_data)
+                # n_list = pickle.load(fp)
                 billings = n_list
-                print(billings)
         except:
             billings = []
 
@@ -172,7 +235,10 @@ class AddNewBilling:
         
         # store list in binary file so 'wb' mode
         with open('billingsfile.txt', 'wb') as fp:
-            pickle.dump(billings, fp)
+            data = pickle.dumps(billings)
+            encrypted_data = encrypt(data)
+            fp.write(encrypted_data)
+            # pickle.dump(billings, fp)
             print('Done writing list into a binary file')
         
         # New task adding to DB

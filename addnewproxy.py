@@ -9,10 +9,13 @@ import pickle
 # from tabs.actions import proxy_tab_action_add_new_data_to_DB
 #
 class AddNewProxy:
-    def __init__(self,root_window,data_show_frame,tab_property,new_proxy_id:str=''):
+    def __init__(self,root_window,data_show_frame,tab_property,new_proxy_id:str='' , edit = False , task_id = 0 , edited_column = None):
         self.new_proxy_id = new_proxy_id
         self.data_show_frame = data_show_frame
         self.tab_property = tab_property
+        self.edit = edit
+        self.task_id = task_id
+        self.edited_column = edited_column
 
         # Create a window
         self.toplevel_window_obj = TkTopLevel(root_window.winfo_toplevel(),(350, 650))
@@ -103,7 +106,12 @@ class AddNewProxy:
 
 
         save_btn_obj = TkWidget()
-        save_btn = save_btn_obj.image_btn(self.data_entry_root_Frame , imgTk=image__.icons("save".lower()), imgTk_hover=image__.icons("save".lower()+"_hover"), dimension= (107+10,35+10), bg = Colors__.color()["navigation bar"]["selected tab"], activebackground = Colors__.color()["navigation bar"]["selected tab"])
+        save_btn = save_btn_obj.image_btn(self.data_entry_root_Frame ,
+                                          imgTk=image__.icons("save".lower()), 
+                                          imgTk_hover=image__.icons("save".lower()+"_hover"), 
+                                          dimension= (107+10,35+10), 
+                                          bg = Colors__.color()["navigation bar"]["selected tab"], 
+                                          activebackground = Colors__.color()["navigation bar"]["selected tab"])
         save_btn.pack()
         save_btn["command"] = self.save_btn_action
 
@@ -118,6 +126,57 @@ class AddNewProxy:
 
 
     def save_btn_action(self):
+        if self.edit:
+            self.save_edited_proxy()
+        else:
+            self.add_new_proxy_data()
+            
+            
+    def save_edited_proxy(self):
+        proxies = []
+        try:
+            # for reading also binary mode is important
+            with open('proxiesfile.txt', 'rb') as fp:
+                n_list = pickle.load(fp)
+                for task in n_list:
+                    if self.task_id == task.task_id:
+                        n_list.remove(task)
+                       
+                proxies = n_list
+        except:
+            proxies = []
+            
+        display_data = {
+            "ID": self.task_id,
+            "Proxy IP": "",
+            "Proxy Port": "",
+            "Proxy Username": "",
+            "Proxy Password": "",
+            "Status": "",
+        }
+        
+        
+
+        for each_widget_data in list(display_data.keys())[1:-1]:
+            display_data[each_widget_data] = str(self.add_new_data_widget[each_widget_data]["insert_data"].get()).strip()
+
+        proxies.append(StoreProxy(self.task_id, display_data["Proxy IP"], display_data["Proxy Port"], display_data["Proxy Username"], display_data["Proxy Password"]))
+
+        with open('proxiesfile.txt', 'wb') as fp:
+            pickle.dump(proxies, fp)
+            print('Done writing list into a binary file')
+        
+        
+        self.edited_column["Proxy IP"]["label"]["text"] = display_data["Proxy IP"]
+        self.edited_column["Proxy Port"]["label"]["text"] = display_data["Proxy Port"]
+        self.edited_column["Proxy Username"]["label"]["text"] = display_data["Proxy Username"]
+        self.edited_column["Proxy Password"]["label"]["text"] = display_data["Proxy Password"]
+        self.window.destroy()
+            
+        
+    
+    def add_new_proxy_data(self):
+        
         '''
         Within this function, It will be adding  data  to  the  proxy
         table and positioning it at the bottom of the proxy  tab. The

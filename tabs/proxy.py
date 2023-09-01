@@ -80,6 +80,7 @@ class ProxyTab:
             self.total_control_btns[each_control_btn]["btn"].pack(side=LEFT, anchor=W)
         # Add New Task Button Call
         self.total_control_btns["add_new_proxy"]["btn"]["command"] = lambda root_=self.base_canvas.winfo_toplevel(), task_tab_frame=self.data_show_frame, details=self.tab_property: proxies_tab_action_add_new_proxy(root_,task_tab_frame,details)
+        self.total_control_btns["delete_all"]["btn"]["command"] =  self.tab_property.delete_all
 
 
         # Left Control Button's Frame

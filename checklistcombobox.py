@@ -1,5 +1,5 @@
 import tkinter as tk
-
+import re
 
 class CheckListComboBox(tk.Menubutton):
     """A combobox widget with checkboxes"""
@@ -35,6 +35,7 @@ class CheckListComboBox(tk.Menubutton):
         return [var.get() for _, var in self.values]
     
     def rerender(self):
+        
         self.menu.post(self.winfo_rootx(), self.winfo_rooty() + self.winfo_height())
 
     def get(self):
@@ -48,7 +49,18 @@ class CheckListComboBox(tk.Menubutton):
             pass
 
         return result
-
+    def get_checked_values(self):
+        pattern = r'[0-9]'
+        values = []
+        for value in self.values:
+            if value[1].get() > 0:
+                if '.' in value[0]:
+                    new =  value[0].split(" " , 1)[1]
+                    values.append(new)
+                else:
+                    values.append(value[0])
+        return values
+        
     def bind_command(self, index, command):
         """Bind a function to handle the changes of a checkbox
 

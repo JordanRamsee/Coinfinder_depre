@@ -18,8 +18,12 @@ from tabs.actions import *
 
 
 class TabProperty:
+    
     def __init__(self,base):
         self.tab_base_frame = base
+        self.list_of_tabs = []
+        self.details = None
+        
 
     """
     This method generates three frames  called  Header,  Middle,
@@ -47,7 +51,7 @@ class TabProperty:
         if bottom_height != 0:
             self.total_control_frame.pack()
             self.total_control_frame.pack_propagate(False)
-
+        self.details = self.data_show_frame
         return self.header_frame ,self.data_show_frame , self.total_control_frame
 
     """
@@ -78,6 +82,7 @@ class TabProperty:
 
 
     def individual_data(self,base_frame,display_data):
+        # print(display_data)
         individual_data_frame11 = Frame(base_frame,width=1300-15,height=45,bg=Colors__.color()["task"]["bg"],border=0,borderwidth=0,highlightthickness=0)
         individual_data_frame11.pack()
         individual_data_frame11.pack_propagate(False)
@@ -146,7 +151,7 @@ class TabProperty:
                 "right": {"width": 32 + 16, "type": "single", "canvas_width":32*2, "bg":"green"},
             },
             "capture": {
-                "left": {"width": 32 + 16, "type": "single", "canvas_width":32*2, "bg":"red"},
+                # "left": {"width": 32 + 16, "type": "single", "canvas_width":32*2, "bg":"red"},
                 "right": {"width": 32 + 16, "type": "single", "canvas_width":32*2, "bg":"green"},
             },
         }
@@ -212,7 +217,6 @@ class TabProperty:
         
         elif self.current_tab_name == "capture":
             control_btn_details = {
-                "edit":  {"place": {"x": 20, "y": 8}},
                 "delete": {"place": {"x": 60, "y": 8}},
             }
 
@@ -220,7 +224,7 @@ class TabProperty:
 
                 individual_control_btn[each_control_btn] = {}
                 individual_control_btn[each_control_btn]["btn_obj"] = TkWidget()
-                individual_control_btn[each_control_btn]["btn"] = individual_control_btn[each_control_btn]["btn_obj"].image_btn(self.action_btn_bg["left"] , imgTk=image__.icons(each_control_btn.lower(),dimension=(12,12)), imgTk_hover=image__.icons(each_control_btn.lower()+"_hover",dimension=(12,12)), dimension= (16,16), bg = Colors__.color()["task"]["action bg"], activebackground = Colors__.color()["task"]["action bg"])
+                individual_control_btn[each_control_btn]["btn"] = individual_control_btn[each_control_btn]["btn_obj"].image_btn(self.action_btn_bg["right"] , imgTk=image__.icons(each_control_btn.lower(),dimension=(12,12)), imgTk_hover=image__.icons(each_control_btn.lower()+"_hover",dimension=(12,12)), dimension= (16,16), bg = Colors__.color()["task"]["action bg"], activebackground = Colors__.color()["task"]["action bg"])
                 individual_control_btn[each_control_btn]["btn"].place(x=control_btn_details[each_control_btn]["place"]["x"],y=control_btn_details[each_control_btn]["place"]["y"])
             
             # Button Press Action
@@ -229,7 +233,8 @@ class TabProperty:
         
 
         # Edit Button Press Action
-        individual_control_btn["edit"]["btn"]["command"] = lambda display_data = display_data, column_data=column_data : self.edit_data(display_data,column_data)
+        if self.current_tab_name != "capture":
+            individual_control_btn["edit"]["btn"]["command"] = lambda display_data = display_data, column_data=column_data : self.edit_data(display_data,column_data)
 
         # Delete Button
         individual_control_btn["delete"] = {}
@@ -238,8 +243,10 @@ class TabProperty:
         individual_control_btn["delete"]["btn"].place(x=15,y=8)
         # Command
         individual_control_btn["delete"]["btn"]["command"] = lambda root_frame=root_frame, display_data = display_data : self.delete_data(root_frame, display_data)
-
-
+        self.list_of_tabs.append([root_frame , display_data])
+        # if self.current_tab_name == "task": 
+        #     self.list_of_tabs.append([root_frame , display_data])
+        #     print(root_frame , display_data)
 
     #need to change according to tab
     def run_stop_each_individual(self,Tk_btn_,stage,display_data):
@@ -256,7 +263,12 @@ class TabProperty:
             task_tab_action_terminate(display_data)
 
 
-
+    def delete_all(self):
+        print('all is deleted')
+        if len(self.list_of_tabs) != 0 :
+            for tab in self.list_of_tabs:
+                self.delete_data(tab[0] , tab[1])
+            
 
     def delete_data(self,root_frame,display_data):
         if self.current_tab_name == "task":
@@ -292,11 +304,14 @@ class TabProperty:
 
     def edit_data(self,display_data, column_data):
         if self.current_tab_name == "task":
-            task_tab_action_edit(display_data,column_data)
+            print(display_data , column_data)
+            
+            # task_tab_action_add_new_task(self.tab_base_frame , self , self.details , display_data,column_data, True , display_data['ID']  )
+            task_tab_action_edit(display_data,column_data , self.tab_base_frame , self , self.details )
         elif self.current_tab_name == "billing":
-            billing_tab_action_edit(display_data,column_data)
+            billing_tab_action_edit(display_data,column_data , self.tab_base_frame , self , self.details )
         elif self.current_tab_name == "proxy":
-            proxies_tab_action_edit(display_data,column_data)
-        elif self.current_tab_name == "capture":
-            captures_tab_action_edit(display_data,column_data)
+            proxies_tab_action_edit(display_data,column_data , self.tab_base_frame , self , self.details )
+        # elif self.current_tab_name == "capture":
+        #     captures_tab_action_edit(display_data,column_data)
 
