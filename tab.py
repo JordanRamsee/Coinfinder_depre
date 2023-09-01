@@ -57,14 +57,14 @@ class Tab:
                 "bg" : Colors__.color()["working space"]["bg"],
             },
 
-            "Settings": {
-                "img": {
-                    "normal": image__.icons("settings"),
-                    "hover": image__.icons("settings_hover"),
-                    "selected": image__.icons("settings_selected")
-                },
-                "bg" : Colors__.color()["working space"]["bg"],
-            },
+            # "Settings": {
+            #     "img": {
+            #         "normal": image__.icons("settings"),
+            #         "hover": image__.icons("settings_hover"),
+            #         "selected": image__.icons("settings_selected")
+            #     },
+            #     "bg" : Colors__.color()["working space"]["bg"],
+            # },
 
         }
 
@@ -85,7 +85,7 @@ class Tab:
             elif individual_tab_name == "Billing": BillingTab(self.tab_btns[individual_tab_name]["working_canvas"])
             elif individual_tab_name == "Proxies": ProxyTab(self.tab_btns[individual_tab_name]["working_canvas"])
             elif individual_tab_name == "Capture": CaptureTab(self.tab_btns[individual_tab_name]["working_canvas"])
-            elif individual_tab_name == "Settings": pass
+            # elif individual_tab_name == "Settings": pass
 
 
 

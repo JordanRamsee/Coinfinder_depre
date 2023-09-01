@@ -34,7 +34,9 @@ class TkScrollFrame:
         return self.scrollable_frame
 
     def on_mousewheel(self,e):
-        self.scrollable_canvas.yview_scroll(int(-1 * (e.delta / 120)), "units")
+       
+        if self.scrollable_frame.winfo_height() > self.scrollable_canvas.winfo_height():
+            self.scrollable_canvas.yview_scroll(int(-1 * (e.delta / 120)), "units")
 
 class TKScrollCanvas(Canvas): 
     def __init__(self, master=None, cnf={}, **kw):
@@ -50,6 +52,7 @@ class TKScrollCanvas(Canvas):
         self.scrollable_frame.bind("<Configure>", lambda e: self.configure(scrollregion=self.bbox("all")))
 
     def on_mousewheel(self,e):
+     
         self.yview_scroll(int(-1 * (e.delta / 120)), "units")
 
 

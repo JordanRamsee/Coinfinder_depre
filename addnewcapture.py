@@ -8,7 +8,8 @@ from checklistcombobox import *
 import ccxt
 from storebilling import StoreBilling
 from storeproxy import StoreProxy
-
+from encryption import decrypt
+from storecapture import StoreCapture
 # from tabs.actions import proxy_tab_action_add_new_data_to_DB
 #
 class AddNewCapture:
@@ -45,11 +46,13 @@ class AddNewCapture:
         # Read stored list of api key objects 
         with open("billingsfile.txt", "rb") as score_file:
             billings = []
-            while True:
-                try:
-                    billings.append(pickle.load(score_file))
-                except EOFError:
-                    break
+            data = score_file.read()
+            decrypted_data = decrypt(data)
+            
+            try:
+                billings.append(  pickle.loads(decrypted_data) ) 
+            except :
+                pass
         
         # Checks to see if the list is empty, if it's pass and if it's not then add the id and exchange to the dropdown value
         if not billings:
@@ -72,6 +75,7 @@ class AddNewCapture:
                     break
         
         if not proxies:
+            
             pass
         else:
             for proxyObject in proxies:
@@ -168,7 +172,11 @@ class AddNewCapture:
                 {'asset': 'LTC', 'amount': '500.00000000', 'date': '8/19/2023'},
                 {'asset': 'TRX', 'amount': '500000.00000000', 'date': '8/19/2023'},
                 {'asset': 'USDT', 'amount': '10000.00000000', 'date': '8/19/2023'},
-                {'asset': 'XRP', 'amount': '50000.00000000', 'date': '8/19/2023'}]        
+                {'asset': 'XRP', 'amount': '50000.00000000', 'date': '8/19/2023'},
+                
+                
+                
+                ]        
         return data_list
 
 
@@ -196,20 +204,36 @@ class AddNewCapture:
         # I NEED TO PASS THE API KEY AND THE PROXY INTO THE FUNCTION
         data = self.get_balance("api_key", "proxy")
 
-        for each_widget_data in list(display_data.keys())[1:-1]:
-            display_data[each_widget_data] = str(self.add_new_data_widget[each_widget_data]["insert_data"].get()).strip()
+        # for each_widget_data in list(display_data.keys())[1:2]:
+        #     display_data[each_widget_data] = str(self.add_new_data_widget[each_widget_data]["insert_data"].get()).strip()
 
         # Set Initial Status
+        self.tab_property.delete_all()
         display_data["Status"] = "New"
-        self.tab_property.individual_data(self.data_show_frame, display_data)
+        id = 1
+        captures = []
+        for d in data :
+            display_data["ID"] = id
+            display_data["Coin"] = d["asset"]
+            display_data["Amount"] = d["amount"]
+            display_data["Date"] = d["date"]
+            self.tab_property.individual_data(self.data_show_frame, display_data)
+            id+=1
+            captures.append(self.save_capture(display_data))
+        id = 0
+        with open('capturesfile.txt' , 'wb') as fp:
+            pickle.dump( captures  , fp )
+
+            
 
         # New capture adding to DB
         # capture_tab_action_add_new_data_to_DB(display_data)
 
-
         self.window.destroy()
 
-
+    def save_capture(self, data ):
+        capture = StoreCapture(data["ID"] , data["Coin"] , data["Amount"] , data["Date"])
+        return capture
 
 
 if __name__ == "__main__":
