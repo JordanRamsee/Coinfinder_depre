@@ -153,7 +153,7 @@ class AddNewBilling:
         
         billings.append(StoreBilling(self.task_id, display_data["Exchange"], display_data["Public Key"], display_data["Secret Key"]))
 
-        
+        billings = sorted(billings , key = lambda k : k.key_id) 
         # store list in binary file so 'wb' mode
         with open('billingsfile.txt', 'wb') as fp:
             data = pickle.dumps(billings)
