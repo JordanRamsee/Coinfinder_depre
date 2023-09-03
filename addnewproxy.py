@@ -134,17 +134,17 @@ class AddNewProxy:
             
     def save_edited_proxy(self):
         proxies = []
-        try:
+        # try:
             # for reading also binary mode is important
-            with open('proxiesfile.txt', 'rb') as fp:
-                n_list = pickle.load(fp)
-                for task in n_list:
-                    if self.task_id == task.task_id:
-                        n_list.remove(task)
-                       
-                proxies = n_list
-        except:
-            proxies = []
+        with open('proxiesfile.txt', 'rb') as fp:
+            n_list = pickle.load(fp)
+            for task in n_list:
+                if self.task_id == task.proxy_id:
+                    n_list.remove(task)
+                    
+            proxies = n_list
+        # except:
+        #     proxies = []
             
         display_data = {
             "ID": self.task_id,
@@ -161,7 +161,7 @@ class AddNewProxy:
             display_data[each_widget_data] = str(self.add_new_data_widget[each_widget_data]["insert_data"].get()).strip()
 
         proxies.append(StoreProxy(self.task_id, display_data["Proxy IP"], display_data["Proxy Port"], display_data["Proxy Username"], display_data["Proxy Password"]))
-
+        proxies = sorted(proxies , key = lambda k : k.proxy_id) 
         with open('proxiesfile.txt', 'wb') as fp:
             pickle.dump(proxies, fp)
             print('Done writing list into a binary file')

@@ -276,6 +276,7 @@ class AddNewTask:
         updated_task = StoreTask(self.task_id, display_data["Exchanges"], display_data["Proxy"], display_data["Crypto Pairs"], display_data["Exchanges for Proxy"])
         print(updated_task.proxy_exchanges)
         tasks.append(updated_task)
+        tasks = sorted(tasks , key = lambda k : k.task_id) 
         with open('tasksfile.txt', 'wb') as fp:
             data = pickle.dumps(tasks)
             encrypted_data = encrypt(data)
